@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-tw">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,23 +8,69 @@
     <link rel="stylesheet" href="style/css/all.css">
     <title>口罩地圖</title>
 </head>
+
 <body>
     <section class="container-fluid">
-        <main class="row">
-            <div class="col-md-4 ">
-                
-            </div>
-            <div class="col-md-8 ">
-                
-            </div>
-        </main>
+        <article class="row vh-100">
+            <!-- 選單列 -->
+            <menu class="col-md-2 m-0 bg-info">
+                <!-- 縣市選擇 -->
+                <div class="my-3 row align-items-center fs-5">
+                    <label for="city" class="col-sm-3 col-form-label text-center fw-bold">縣市</label>
+                    <div class="col-sm-9">
+                        <select class="form-select text-center" aria-label="Default select example" id="city">
+                            <option selected>----請選擇縣市----</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 鄉鎮地區 -->
+                <div class="my-3 row align-items-center fs-5">
+                    <label for="town" class="col-sm-3 col-form-label text-center fw-bold">鄉鎮區</label>
+                    <div class="col-sm-9">
+                        <select class="form-select text-center" aria-label="Default select example" id="town">
+                            <option selected>----請選擇縣市----</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 藥局資料 -->
+                <ul class="list-group">
+                    <li class="list-group-item">
+                      <h4 class="fw-bold">XXX藥局</h4>
+                        <p>地址: XXXX</p>
+                        <p>電話: XXXXXX</p>
+                        <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個</p>
+                    </li>
+ 
+                </ul>
+
+            </menu>
+
+
+            <main class="col-md-10 m-0 bg-secondary">
+
+            </main>
+        </article>
+        
     </section>
 
 
     <!-- 外部 js -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <!-- mine js -->
+    <script type="moudle" src="./script/all.js"></script>
 
 </body>
+
 </html>
