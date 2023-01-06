@@ -1,15 +1,26 @@
 {
+  "type": "module",
   "dependencies": {
     "bootstrap": "^5.2.3",
     "jquery": "^3.6.3"
   },
   "name": "covin19",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "all.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keon981/maskmap.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/keon981/maskmap/issues"
+  },
+  "homepage": "https://github.com/keon981/maskmap#readme",
   "description": ""
 }

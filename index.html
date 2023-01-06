@@ -16,9 +16,9 @@
             <menu class="col-md-2 m-0 bg-info">
                 <!-- 縣市選擇 -->
                 <div class="my-3 row align-items-center fs-5">
-                    <label for="city" class="col-sm-3 col-form-label text-center fw-bold">縣市</label>
+                    <label for="TaiwanCity" class="col-sm-3 col-form-label text-center fw-bold">縣市</label>
                     <div class="col-sm-9">
-                        <select class="form-select text-center" aria-label="Default select example" id="city">
+                        <select class="form-select text-center" aria-label="Default select example" id="TaiwanCity">
                             <option selected>----請選擇縣市----</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
@@ -28,9 +28,9 @@
                 </div>
                 <!-- 鄉鎮地區 -->
                 <div class="my-3 row align-items-center fs-5">
-                    <label for="town" class="col-sm-3 col-form-label text-center fw-bold">鄉鎮區</label>
+                    <label for="TaiwanTown" class="col-sm-3 col-form-label text-center fw-bold">鄉鎮區</label>
                     <div class="col-sm-9">
-                        <select class="form-select text-center" aria-label="Default select example" id="town">
+                        <select class="form-select text-center" aria-label="Default select example" id="TaiwanTown">
                             <option selected>----請選擇縣市----</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
@@ -41,12 +41,13 @@
                 <!-- 藥局資料 -->
                 <ul class="list-group">
                     <li class="list-group-item">
-                      <h4 class="fw-bold">XXX藥局</h4>
+                        <h4 class="fw-bold">XXX藥局</h4>
                         <p>地址: XXXX</p>
                         <p>電話: XXXXXX</p>
-                        <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個</p>
+                        <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個
+                        </p>
                     </li>
- 
+
                 </ul>
 
             </menu>
@@ -56,20 +57,16 @@
 
             </main>
         </article>
-        
+
     </section>
 
 
     <!-- 外部 js -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
-        integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./script/module/citydata.js"></script>
     <!-- mine js -->
-    <script type="module" src="./script/all.js"></script>
+    <script src="./script/all.js"></script>
 
 </body>
 
