@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/css/all.css">
+    <title>口罩地圖</title>
+</head>
+
+<body>
+    <section class="container-fluid">
+        <article class="row vh-100">
+            <!-- 選單列 -->
+            <menu class="col-md-3 h-100 m-0 d-flex flex-column bg-info">
+                <!-- 縣市選擇 -->
+                <div class="my-3 row align-items-center fs-5">
+                    <label for="TaiwanCity" class="col-sm-3 col-form-label text-center fw-bold">縣市</label>
+                    <div class="col-sm-9">
+                        <select class="form-select text-center" aria-label="Default select example" id="TaiwanCity">
+                            <option selected>----請選擇縣市----</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                            
+                        </select>
+                    </div>
+                </div>
+                <!-- 鄉鎮地區 -->
+                <div class="my-3 row align-items-center fs-5">
+                    <label for="TaiwanTown" class="col-sm-3 col-form-label text-center fw-bold">鄉鎮區</label>
+                    <div class="col-sm-9">
+                        <select class="form-select text-center" aria-label="Default select example" id="TaiwanTown">
+                            <option selected>----請選擇縣市----</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 藥局資料 -->
+                <div class="flex-grow-1 pb-3 overflow-auto">
+                    <ul id="drugstore" class="list-group h-100 bg-light">
+                        <!-- <li class="list-group-item">
+                            <h4 class="fw-bold">XXX藥局</h4>
+                            <p>地址: XXXX</p>
+                            <p>電話: XXXXXX</p>
+                            <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4 class="fw-bold">XXX藥局</h4>
+                            <p>地址: XXXX</p>
+                            <p>電話: XXXXXX</p>
+                            <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4 class="fw-bold">XXX藥局</h4>
+                            <p>地址: XXXX</p>
+                            <p>電話: XXXXXX</p>
+                            <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4 class="fw-bold">XXX藥局</h4>
+                            <p>地址: XXXX</p>
+                            <p>電話: XXXXXX</p>
+                            <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4 class="fw-bold">XXX藥局</h4>
+                            <p>地址: XXXX</p>
+                            <p>電話: XXXXXX</p>
+                            <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個
+                            </p>
+                        </li>
+                        <li class="list-group-item">
+                            <h4 class="fw-bold">XXX藥局</h4>
+                            <p>地址: XXXX</p>
+                            <p>電話: XXXXXX</p>
+                            <p>成人口罩: <span class="text-danger h4">oo</span>個 | 兒童口罩: <span class="text-danger h4">oo</span>個
+                            </p>
+                        </li> -->
+    
+                    </ul>
+                    
+                </div>
+
+            </menu>
+
+
+            <main class="col-md-9 m-0 bg-secondary">
+
+            </main>
+        </article>
+
+    </section>
+
+
+    <!-- 外部 js -->
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./script/module/citydata.js"></script>
+    <!-- mine js -->
+    <script src="./script/all.js"></script>
+</body>
+
+</html>

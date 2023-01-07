@@ -4,8 +4,8 @@ let maskData= [];//紀錄匯出的藥局
 $(function(){
     // 載入藥局資料
     $.ajax({
-        type: "GET",
-        url: "points.json",
+        type: "get",
+        url: 'script/points.json',
         dataType: "json",
         async: false,
         success: function(data){
