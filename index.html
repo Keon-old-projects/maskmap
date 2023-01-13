@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../node_modules/leaflet/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" /> -->
     <link rel="stylesheet" href="style/css/all.css">
     <title>口罩地圖</title>
 </head>
@@ -32,10 +34,7 @@
                     <label for="TaiwanTown" class="col-sm-3 col-form-label text-center fw-bold">鄉鎮區</label>
                     <div class="col-sm-9">
                         <select class="form-select text-center" aria-label="Default select example" id="TaiwanTown">
-                            <option selected>----請選擇縣市----</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option selected>----請先選擇縣市----</option>
                         </select>
                     </div>
                 </div>
@@ -92,8 +91,8 @@
             </menu>
 
 
-            <main class="col-md-9 m-0 bg-secondary">
-
+            <main class="col-md-9 m-0 p-0 bg-secondary">
+                <div id="map" class="w-100 h-100"></div>
             </main>
         </article>
 
@@ -102,10 +101,11 @@
 
     <!-- 外部 js -->
     <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./node_modules/leaflet/dist/leaflet.js"></script>
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./script/module/citydata.js"></script>
     <!-- mine js -->
-    <script src="./script/all.js"></script>
+    <script src="./script/main.js"></script>
 </body>
 
 </html>
