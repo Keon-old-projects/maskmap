@@ -33,9 +33,9 @@ $(function () {
       opacity: 1.0,
     })
       .addTo(map)
-      .setLatLng(e.latlng)
+      .setLatLng(e.latlng) // 移動 marker
       .bindPopup(`目前位置`)
-      .openPopup(); // 移動 marker
+      .openPopup();
   });
 
   // 抓不位置的話要做的事情
@@ -71,40 +71,40 @@ $(function () {
       // console.log(cityVal);//監聽所選取的縣市
       //監聽縣市，載入藥局資料
       const cityList = maskData.filter((i) => i.properties.county == cityVal);
-      console.log(cityList);
+      // console.log("cityList:", cityList);
       removeMarker(); // 清除地圖座標
       // 渲染縣市地圖
-      $("drogstore")
+      $("#drogstore")
         .empty()
         .append(
           cityList.map((i, key) => {
             let lat = i.geometry.coordinates[1],
               lng = i.geometry.coordinates[0];
-
+            // console.log(i);
             // console.log(lat, lng);
             L.marker([lat, lng])
               .addTo(map)
               .bindPopup(
                 `<div class="card">
-                            <h4 class="card-header text-center">${i.properties.name}</h4>
-                            <p class=" fs-5 my-2">成人口罩: <span class="text-danger">${i.properties.mask_adult}</span>個</p>
-                            <p class=" fs-5 my-2">兒童口罩: <span class="text-danger">${i.properties.mask_child}</span>個</p>
-                        </div>`
+                  <h4 class="card-header text-center">${i.properties.name}</h4>
+                  <p class=" fs-5 my-2">成人口罩: <span class="text-danger">${i.properties.mask_adult}</span>個</p>
+                  <p class=" fs-5 my-2">兒童口罩: <span class="text-danger">${i.properties.mask_child}</span>個</p>
+                </div>`
               );
 
             //地圖移動
-            console.log(key);
+            console.log("key:", key);
             if (key == 0) {
               map.panTo([lat, lng]);
             }
 
-            return `<li class="list-group-item">
-                            <h4 class="fw-bold">${i.properties.name}</h4>
-                            <p>地址: ${i.properties.address}</p>
-                            <p>電話: ${i.properties.phone}</p>
-                            <p>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個 | 兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個
-                            </p>
-                        </li>`;
+            return `
+              <li class="list-group-item">
+                <h4 class="fw-bold">${i.properties.name}</h4>
+                <p>地址: ${i.properties.address}</p>
+                <p>電話: ${i.properties.phone}</p>
+                <p>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個 | 兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</p>
+              </li>`;
           })
         );
 
@@ -147,14 +147,14 @@ $(function () {
                   .addTo(map)
                   .bindPopup(
                     `<div class="card">
-                                    <h4 class="card-header text-center">${i.properties.name}</h4>
-                                    <p class=" fs-5 my-2">成人口罩: <span class="text-danger">${i.properties.mask_adult}</span>個</p>
-                                    <p class=" fs-5 my-2">兒童口罩: <span class="text-danger">${i.properties.mask_child}</span>個</p>
-                                </div>`
+                      <h4 class="card-header text-center">${i.properties.name}</h4>
+                      <p class=" fs-5 my-2">成人口罩: <span class="text-danger">${i.properties.mask_adult}</span>個</p>
+                      <p class=" fs-5 my-2">兒童口罩: <span class="text-danger">${i.properties.mask_child}</span>個</p>
+                    </div>`
                   );
 
                 //地圖移動
-                console.log(key);
+                // console.log(key);
                 if (key == 0) {
                   map.panTo([lat, lng]);
                 }
@@ -187,5 +187,5 @@ function errorHandler(e) {
   window.alert(
     "無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心"
   );
-  map.setView(place, 18); // 中心移到動物園
+  map.setView(place, 18); // 中心移到台中世貿
 }
