@@ -37,12 +37,15 @@ const map = L.map("map").setView(place, 13);
 
 $(function () {
   // // menu選單
-  // $("#open-button").on("click", () => {
-  //   api.open();
-  // });
-  // $("#close-button").on("click", () => {
-  //   api.close();
-  // });
+  $(".open-btn").click(() => {
+    $("#menu").toggleClass("active");
+    // console.log("123");
+    if ($(".fa-solid").hasClass("fa-bars")) {
+      $(".fa-solid").removeClass("fa-bars").addClass("fa-x");
+    } else {
+      $(".fa-solid").removeClass("fa-x").addClass("fa-bars");
+    }
+  });
 
   //抓取使用者位置
   map.locate({
