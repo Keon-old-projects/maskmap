@@ -134,10 +134,10 @@ $(function () {
                   <h4>${i.properties.name}</h4>
                   <p><i class="fa-solid fa-location-dot"></i>　${i.properties.address}</p>
                   <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                    <button class="btn btn-warning">成人: ${i.properties.mask_adult}個</button>
-                    <button class="btn btn-success">兒童: ${i.properties.mask_child}個</button>
-                  </div>
+                  <div class="btn-group">
+                  <button>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個</button>
+                  <button>兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</button>
+                </div>
                 </div>`
               );
 
@@ -202,10 +202,10 @@ $(function () {
                       <h4>${i.properties.name}</h4>
                       <p><i class="fa-solid fa-location-dot"></i>　${i.properties.address}</p>
                       <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
-                      <div class="btn-group" role="group" aria-label="Basic example">
-                        <button class="btn btn-warning">成人: ${i.properties.mask_adult}個</button>
-                        <button class="btn btn-success">兒童: ${i.properties.mask_child}個</button>
-                      </div>
+                      <div class="btn-group">
+                            <button>成人口罩: ${i.properties.mask_adult}個</button>
+                            <button>兒童口罩: ${i.properties.mask_adult}個</button>
+                        </div>
                     </div>`
                   );
 

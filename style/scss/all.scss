@@ -112,30 +112,7 @@ menu {
           color: #666;
           margin: 0.5rem 0;
         }
-        .btn-group {
-          position: relative;
-          display: flex;
-          flex-wrap: wrap;
-          vertical-align: middle;
 
-          button {
-            display: inline-block;
-            max-width: 100%;
-            margin: 0.3rem 0.3rem;
-            padding: 0.4rem 0.75rem;
-            border-radius: 5px;
-            &:first-child {
-              background-color: rgba(255, 151, 59, 0.2);
-              border: 0;
-              color: #ff973b;
-            }
-            &:last-child {
-              background-color: rgba(255, 219, 77, 0.33);
-              border: 0;
-              color: #f8be00;
-            }
-          }
-        }
         &:hover {
           cursor: pointer;
           background-color: #ddd;
@@ -151,6 +128,30 @@ menu {
     width: 100vw;
     height: 75vh;
     bottom: 0;
+  }
+}
+.btn-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  vertical-align: middle;
+
+  button {
+    display: inline-block;
+    max-width: 100%;
+    margin: 0.3rem 0.3rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 5px;
+    &:first-child {
+      background-color: rgba(255, 151, 59, 0.2);
+      border: 0;
+      color: #ff973b;
+    }
+    &:last-child {
+      background-color: rgba(255, 219, 77, 0.33);
+      border: 0;
+      color: #f8be00;
+    }
   }
 }
 
