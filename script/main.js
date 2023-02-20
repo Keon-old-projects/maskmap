@@ -40,10 +40,10 @@ $(function () {
   $(".open-btn").click(() => {
     $("#menu").toggleClass("active");
     // console.log("123");
-    if ($(".fa-solid").hasClass("fa-bars")) {
-      $(".fa-solid").removeClass("fa-bars").addClass("fa-x");
+    if ($(".open-btn-fa").hasClass("fa-bars")) {
+      $(".open-btn-fa").removeClass("fa-bars").addClass("fa-x");
     } else {
-      $(".fa-solid").removeClass("fa-x").addClass("fa-bars");
+      $(".open-btn-fa").removeClass("fa-x").addClass("fa-bars");
     }
   });
 
