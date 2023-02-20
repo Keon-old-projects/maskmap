@@ -23,11 +23,7 @@ $(function () {
   $(".open-btn").click(() => {
     $("#menu").toggleClass("active");
     // console.log("123");
-    if ($(".open-btn-fa").hasClass("fa-bars")) {
-      $(".open-btn-fa").removeClass("fa-bars").addClass("fa-x");
-    } else {
-      $(".open-btn-fa").removeClass("fa-x").addClass("fa-bars");
-    }
+    hasActive();
   });
 
   //抓取使用者位置
@@ -243,6 +239,8 @@ $(function () {
       lng = item.geometry.coordinates[0];
     // console.log([lat, lng]);
     map.setView([lat, lng], 18);
+    $("#menu").toggleClass("active");
+    hasActive();
   });
 });
 
@@ -253,4 +251,12 @@ function removeMarker() {
       map.removeLayer(layer);
     }
   });
+}
+
+function hasActive() {
+  if ($("#menu").hasClass("active")) {
+    $(".open-btn-fa").removeClass("fa-bars").addClass("fa-x");
+  } else {
+    $(".open-btn-fa").removeClass("fa-x").addClass("fa-bars");
+  }
 }
