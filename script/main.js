@@ -7,13 +7,38 @@ let maskData = []; //匯入的藥局資料集合
 // 地圖資訊
 const place = [24.177253541961687, 120.61678567485743]; //經緯度
 const map = L.map("map").setView(place, 13);
+const menu = new Mmenu(
+  "#menu",
+  {
+    slidingSubmenus: false,
+  },
+  {
+    classNames: {
+      selected: "active",
+    },
+    offCanvas: {
+      page: {
+        selector: "#page",
+      },
+    },
+  }
+);
+const api = menu.API;
 
 $(function () {
+  // menu選單
+  $("#open-button").on("click", () => {
+    api.open();
+  });
+  $("#close-button").on("click", () => {
+    api.close();
+  });
+
   //抓取使用者位置
   map.locate({
     setView: true, // 是否讓地圖跟著移動中心點
     watch: true, // 是否要一直監測使用者位置
-    maxZoom: 18, // 最大的縮放值
+    maxZoom: 9, // 最大的縮放值
     enableHighAccuracy: true, // 是否要高精準度的抓位置
     timeout: 10000, // 觸發locationerror事件之前等待的毫秒數
   });
@@ -68,13 +93,13 @@ $(function () {
     )
     .on("change", function () {
       const cityVal = $(this).val();
-      // console.log(cityVal);//監聽所選取的縣市
+      console.log(cityVal); //監聽所選取的縣市
       //監聽縣市，載入藥局資料
       const cityList = maskData.filter((i) => i.properties.county == cityVal);
       // console.log("cityList:", cityList);
       removeMarker(); // 清除地圖座標
-      // 渲染縣市地圖
-      $("#drogstore")
+      // 渲染縣市地圖與藥局資訊
+      $("#drugStore")
         .empty()
         .append(
           cityList.map((i, key) => {
@@ -85,15 +110,19 @@ $(function () {
             L.marker([lat, lng])
               .addTo(map)
               .bindPopup(
-                `<div class="card">
-                  <h4 class="card-header text-center">${i.properties.name}</h4>
-                  <p class=" fs-5 my-2">成人口罩: <span class="text-danger">${i.properties.mask_adult}</span>個</p>
-                  <p class=" fs-5 my-2">兒童口罩: <span class="text-danger">${i.properties.mask_child}</span>個</p>
+                `<div class="store-card">
+                  <h4>${i.properties.name}</h4>
+                  <p><i class="fa-solid fa-location-dot"></i>　${i.properties.address}</p>
+                  <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button class="btn btn-warning">成人: ${i.properties.mask_adult}個</button>
+                    <button class="btn btn-success">兒童: ${i.properties.mask_child}個</button>
+                  </div>
                 </div>`
               );
 
             //地圖移動
-            console.log("key:", key);
+            // console.log("key:", key);
             if (key == 0) {
               map.panTo([lat, lng]);
             }
@@ -101,8 +130,8 @@ $(function () {
             return `
               <li class="list-group-item">
                 <h4 class="fw-bold">${i.properties.name}</h4>
-                <p>地址: ${i.properties.address}</p>
-                <p>電話: ${i.properties.phone}</p>
+                <p  class="my-2"><i class="fa-solid fa-location-dot"></i>  ${i.properties.address}</p>
+                <p  class="my-2"><i class="fa-solid fa-phone-volume"></i>  ${i.properties.phone}</p>
                 <p>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個 | 兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</p>
               </li>`;
           })
@@ -130,12 +159,12 @@ $(function () {
               i.properties.county == cityVal && i.properties.town == townVal
           );
           // console.log(townList.map(i=>i.properties));
-          console.log(townList);
+          // console.log(townList);
 
           removeMarker(); // 清除地圖座標
 
           //渲染藥局資訊
-          $("#drugstore")
+          $("#drugStore")
             .empty()
             .append(
               townList.map((i, key) => {
@@ -146,10 +175,14 @@ $(function () {
                 L.marker([lat, lng])
                   .addTo(map)
                   .bindPopup(
-                    `<div class="card">
-                      <h4 class="card-header text-center">${i.properties.name}</h4>
-                      <p class=" fs-5 my-2">成人口罩: <span class="text-danger">${i.properties.mask_adult}</span>個</p>
-                      <p class=" fs-5 my-2">兒童口罩: <span class="text-danger">${i.properties.mask_child}</span>個</p>
+                    `<div class="store-card">
+                      <h4>${i.properties.name}</h4>
+                      <p><i class="fa-solid fa-location-dot"></i>　${i.properties.address}</p>
+                      <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button class="btn btn-warning">成人: ${i.properties.mask_adult}個</button>
+                        <button class="btn btn-success">兒童: ${i.properties.mask_child}個</button>
+                      </div>
                     </div>`
                   );
 
@@ -160,12 +193,11 @@ $(function () {
                 }
 
                 return `<li class="list-group-item">
-                                    <h4 class="fw-bold">${i.properties.name}</h4>
-                                    <p>地址: ${i.properties.address}</p>
-                                    <p>電話: ${i.properties.phone}</p>
-                                    <p>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個 | 兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個
-                                    </p>
-                                </li>`;
+                          <h4 class="fw-bold">${i.properties.name}</h4>
+                          <p class="my-2"><i class="fa-solid fa-location-dot"></i>  ${i.properties.address}</p>
+                          <p class="my-2"><i class="fa-solid fa-phone-volume"></i>  ${i.properties.phone}</p>
+                          <p>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個 | 兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</p>
+                        </li>`;
               })
             );
         });
