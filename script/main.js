@@ -17,23 +17,6 @@ const now = new Date();
 // 地圖資訊
 const place = [24.177253541961687, 120.61678567485743]; //經緯度
 const map = L.map("map").setView(place, 13);
-// const menu = new Mmenu(
-//   "#menu",
-//   {
-//     slidingSubmenus: false,
-//   },
-//   {
-//     classNames: {
-//       selected: "active",
-//     },
-//     offCanvas: {
-//       page: {
-//         selector: "#page",
-//       },
-//     },
-//   }
-// );
-// const api = menu.API;
 
 $(function () {
   // // menu選單
@@ -51,7 +34,7 @@ $(function () {
   map.locate({
     setView: true, // 是否讓地圖跟著移動中心點
     watch: true, // 是否要一直監測使用者位置
-    maxZoom: 9, // 最大的縮放值
+    maxZoom: 12, // 最大的縮放值
     enableHighAccuracy: true, // 是否要高精準度的抓位置
     timeout: 10000, // 觸發locationerror事件之前等待的毫秒數
   });
@@ -78,13 +61,30 @@ $(function () {
       opacity: 1.0,
     })
       .addTo(map)
-      .setLatLng(e.latlng) // 移動 marker
-      .bindPopup(`目前位置`)
-      .openPopup();
+      .setLatLng(e.latlng)
+      .bindTooltip(`目前位置`, {
+        direction: "top", // right、left、top、bottom、center。default: auto
+        permanent: true, // 是滑鼠移過才出現，還是一直出現
+        opacity: 1.0,
+      })
+      .openTooltip();
   });
 
   // 抓不位置的話要做的事情
-  map.on("locationerror", errorHandler);
+  map.on("locationerror", (e) => {
+    {
+      console.log("e", e);
+      window.alert(
+        "無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心"
+      );
+      // map.setView(place, 18);
+      // 中心移到台中世貿
+      L.marker(place)
+        .addTo(map)
+        .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+        .openPopup();
+    }
+  });
 
   // 載入藥局資料
   $.ajax({
@@ -99,7 +99,7 @@ $(function () {
       alert("載入資料失敗!");
     },
   });
-  console.log(maskData); //讀取健保局的所有藥局資料
+  // console.log(maskData); //讀取健保局的所有藥局資料
 
   // 縣市綁定HTML選單
   // console.log(cityData);//監聽台灣縣市鄉鎮地區的資料集合
@@ -144,11 +144,11 @@ $(function () {
             //地圖移動
             // console.log("key:", key);
             if (key == 0) {
-              map.panTo([lat, lng]);
+              map.setView([lat, lng], 12);
             }
 
             return `
-              <li>
+              <li data-id="${i.properties.id}">
                 <h4>${i.properties.name}</h4>
                 <p><i class="fa-solid fa-location-dot"></i>　 ${i.properties.address}</p>
                 <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
@@ -212,11 +212,11 @@ $(function () {
                 //地圖移動
                 // console.log(key);
                 if (key == 0) {
-                  map.panTo([lat, lng]);
+                  map.setView([lat, lng], 15);
                 }
 
                 return `
-                <li>
+                <li data-id="${i.properties.id}">
                   <h4>${i.properties.name}</h4>
                   <p><i class="fa-solid fa-location-dot"></i>　 ${i.properties.address}</p>
                   <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
@@ -229,6 +229,21 @@ $(function () {
             );
         });
     });
+
+  // let num = 1;
+  // console.log(maskData);
+  $("ul").on("click", "li", function (e) {
+    // console.log((num += 1));
+    const index = $(this).data("id"); // 取得被點擊的 li 元素的索引
+    const item = maskData.find((i) => i.properties.id == index); // 取得對應的物件資料
+    // console.log(index);
+    // console.log(item);
+
+    let lat = item.geometry.coordinates[1],
+      lng = item.geometry.coordinates[0];
+    // console.log([lat, lng]);
+    map.setView([lat, lng], 18);
+  });
 });
 
 // 清除地圖座標
@@ -238,13 +253,4 @@ function removeMarker() {
       map.removeLayer(layer);
     }
   });
-}
-
-// 使用者不提供位置
-function errorHandler(e) {
-  console.log("e", e);
-  window.alert(
-    "無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心"
-  );
-  map.setView(place, 18); // 中心移到台中世貿
 }
