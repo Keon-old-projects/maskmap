@@ -2,36 +2,49 @@ let city = ""; //紀錄選取的縣市名稱
 let townData = []; //匯入鄉鎮地區的資料
 let country = ""; //紀錄選取的鄉鎮地區
 let maskData = []; //匯入的藥局資料集合
+let days = [
+  "星期日",
+  "星期一",
+  "星期二",
+  "星期三",
+  "星期四",
+  "星期五",
+  "星期六",
+];
+const now = new Date();
 // const value = $(this).val();
 
 // 地圖資訊
 const place = [24.177253541961687, 120.61678567485743]; //經緯度
 const map = L.map("map").setView(place, 13);
-const menu = new Mmenu(
-  "#menu",
-  {
-    slidingSubmenus: false,
-  },
-  {
-    classNames: {
-      selected: "active",
-    },
-    offCanvas: {
-      page: {
-        selector: "#page",
-      },
-    },
-  }
-);
-const api = menu.API;
+// const menu = new Mmenu(
+//   "#menu",
+//   {
+//     slidingSubmenus: false,
+//   },
+//   {
+//     classNames: {
+//       selected: "active",
+//     },
+//     offCanvas: {
+//       page: {
+//         selector: "#page",
+//       },
+//     },
+//   }
+// );
+// const api = menu.API;
 
 $(function () {
-  // menu選單
-  $("#open-button").on("click", () => {
-    api.open();
-  });
-  $("#close-button").on("click", () => {
-    api.close();
+  // // menu選單
+  $(".open-btn").click(() => {
+    $("#menu").toggleClass("active");
+    // console.log("123");
+    if ($(".fa-solid").hasClass("fa-bars")) {
+      $(".fa-solid").removeClass("fa-bars").addClass("fa-x");
+    } else {
+      $(".fa-solid").removeClass("fa-x").addClass("fa-bars");
+    }
   });
 
   //抓取使用者位置
@@ -49,6 +62,13 @@ $(function () {
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', // 商用時必須要有版權出處
     zoomControl: true, // 是否秀出 - + 按鈕
   }).addTo(map);
+
+  // 時間設置
+  $("#date").text(
+    `${now.getFullYear()} / ${now.getMonth() + 1} / ${now.getDate()}`
+  );
+
+  $("#week").text(days[now.getDay()]);
 
   //抓取到使用者位置之後
   map.on("locationfound", (e) => {
@@ -85,7 +105,7 @@ $(function () {
   // console.log(cityData);//監聽台灣縣市鄉鎮地區的資料集合
   $("#TaiwanCity")
     .empty()
-    .append(`<option selected>--請選擇縣市--</option>`)
+    .append(`<option selected>--縣市--</option>`)
     .append(
       cityData.map(
         (e) => `<option value="${e.CityName}">${e.CityName}</option>`
@@ -128,11 +148,14 @@ $(function () {
             }
 
             return `
-              <li class="list-group-item">
-                <h4 class="fw-bold">${i.properties.name}</h4>
-                <p  class="my-2"><i class="fa-solid fa-location-dot"></i>  ${i.properties.address}</p>
-                <p  class="my-2"><i class="fa-solid fa-phone-volume"></i>  ${i.properties.phone}</p>
-                <p>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個 | 兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</p>
+              <li>
+                <h4>${i.properties.name}</h4>
+                <p><i class="fa-solid fa-location-dot"></i>　 ${i.properties.address}</p>
+                <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
+                <div class="btn-group">
+                  <button>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個</button>
+                  <button>兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</button>
+                </div>
               </li>`;
           })
         );
@@ -142,7 +165,7 @@ $(function () {
       // 鄉鎮地區綁定HTML選單
       $("#TaiwanTown")
         .empty()
-        .append(`<option selected>--再選擇地區--</option>'`)
+        .append(`<option selected>--鄉鎮地區--</option>'`)
         .append(
           townData.map(
             (e) => `<option value="${e.AreaName}">${e.AreaName}</option>`
@@ -192,12 +215,16 @@ $(function () {
                   map.panTo([lat, lng]);
                 }
 
-                return `<li class="list-group-item">
-                          <h4 class="fw-bold">${i.properties.name}</h4>
-                          <p class="my-2"><i class="fa-solid fa-location-dot"></i>  ${i.properties.address}</p>
-                          <p class="my-2"><i class="fa-solid fa-phone-volume"></i>  ${i.properties.phone}</p>
-                          <p>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個 | 兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</p>
-                        </li>`;
+                return `
+                <li>
+                  <h4>${i.properties.name}</h4>
+                  <p><i class="fa-solid fa-location-dot"></i>　 ${i.properties.address}</p>
+                  <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
+                  <div class="btn-group">
+                    <button>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個</button>
+                    <button>兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</button>
+                  </div>
+                </li>`;
               })
             );
         });
