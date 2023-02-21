@@ -16,7 +16,7 @@ const now = new Date();
 
 // 地圖資訊
 const place = [24.177253541961687, 120.61678567485743]; //經緯度
-const map = L.map("map").setView(place, 13);
+const map = L.map("map").fitWorld();
 
 $(function () {
   // // menu選單
@@ -29,8 +29,8 @@ $(function () {
   //抓取使用者位置
   map.locate({
     setView: true, // 是否讓地圖跟著移動中心點
-    watch: true, // 是否要一直監測使用者位置
-    maxZoom: 12, // 最大的縮放值
+    watch: false, // 是否要一直監測使用者位置
+    maxZoom: 13, // 最大的縮放值
     enableHighAccuracy: true, // 是否要高精準度的抓位置
     timeout: 10000, // 觸發locationerror事件之前等待的毫秒數
   });
@@ -51,36 +51,36 @@ $(function () {
 
   //抓取到使用者位置之後
   map.on("locationfound", (e) => {
+    let radius = e.accuracy;
     // 建立 marker
-    L.marker(place, {
-      title: "", // 跟 <a> 的 title 一樣
-      opacity: 1.0,
-    })
+    L.marker(e.latlng)
       .addTo(map)
       .setLatLng(e.latlng)
       .bindTooltip(`目前位置`, {
-        direction: "top", // right、left、top、bottom、center。default: auto
         permanent: true, // 是滑鼠移過才出現，還是一直出現
         opacity: 1.0,
       })
       .openTooltip();
+    L.circle(e.latlng, radius).addTo(map);
   });
 
   // 抓不位置的話要做的事情
-  map.on("locationerror", (e) => {
-    {
-      console.log("e", e);
-      window.alert(
-        "無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心"
-      );
-      // map.setView(place, 18);
-      // 中心移到台中世貿
-      L.marker(place)
-        .addTo(map)
-        .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
-        .openPopup();
-    }
-  });
+  map
+    .on("locationerror", (e) => {
+      {
+        alert(
+          "無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心"
+        );
+        // map.setView(place, 18);
+        // 中心移到台中世貿
+        L.marker(place)
+
+          .addTo(map)
+          .bindPopup("預設位置")
+          .openPopup();
+      }
+    })
+    .setView(place, 16);
 
   // 載入藥局資料
   $.ajax({
