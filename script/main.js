@@ -18,30 +18,79 @@ const now = new Date();
 const place = [24.177253541961687, 120.61678567485743]; //經緯度
 const map = L.map("map").fitWorld();
 
+let myLayer = L.geoJSON() // 渲染縣市地圖的藥局資訊
+  .bindPopup(function (layer) {
+    let item = layer.feature.properties;
+    console.log(item);
+    return `<div class="store-card">
+    <h4>${item.name}</h4>
+    <p><i class="fa-solid fa-location-dot"></i>　${item.address}</p>
+    <p><i class="fa-solid fa-phone-volume"></i>　${item.phone}</p>
+    <div class="btn-group">
+          <button>成人口罩: ${item.mask_adult}個</button>
+          <button>兒童口罩: ${item.mask_child}個</button>
+      </div>
+   /div>`;
+  })
+  .addTo(map);
+
+//抓取使用者位置
+map.locate({
+  setView: true, // 是否讓地圖跟著移動中心點
+  watch: false, // 是否要一直監測使用者位置
+  maxZoom: 13, // 最大的縮放值
+  enableHighAccuracy: true, // 是否要高精準度的抓位置
+  timeout: 10000, // 觸發locationerror事件之前等待的毫秒數
+});
+
+// 載入圖資
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', // 商用時必須要有版權出處
+  zoomControl: true, // 是否秀出 - + 按鈕
+}).addTo(map);
+
+//圓形座標
+let MarkerOptions = {
+  radius: 8,
+  fillColor: "#ff7800",
+  color: "#000",
+  weight: 1,
+  opacity: 1,
+  fillOpacity: 0.8,
+};
+
+//抓取到使用者位置之後
+map.on("locationfound", (e) => {
+  let radius = e.accuracy;
+  // 建立 marker
+  L.circleMarker(e.latlng, MarkerOptions)
+    .addTo(map)
+    .setLatLng(e.latlng)
+    .bindTooltip(`目前位置`, {
+      permanent: true, // 是滑鼠移過才出現，還是一直出現
+      opacity: 1.0,
+    })
+    .openTooltip();
+  // console.log("e.latlng", e.latlng);
+});
+
+// 抓不位置的話要做的事情
+map
+  .on("locationerror", (e) => {
+    {
+      alert("無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心");
+      // map.setView(place, 18);
+      // 中心移到台中世貿
+      L.circleMarker(place, MarkerOptions)
+        .addTo(map)
+        .bindPopup("預設位置")
+        .openPopup();
+    }
+  })
+  .setView(place, 16);
+
 $(function () {
-  // // menu選單
-  $(".open-btn").click(() => {
-    $("#menu").toggleClass("active");
-    // console.log("123");
-    hasActive();
-  });
-
-  //抓取使用者位置
-  map.locate({
-    setView: true, // 是否讓地圖跟著移動中心點
-    watch: false, // 是否要一直監測使用者位置
-    maxZoom: 13, // 最大的縮放值
-    enableHighAccuracy: true, // 是否要高精準度的抓位置
-    timeout: 10000, // 觸發locationerror事件之前等待的毫秒數
-  });
-
-  // 載入圖資
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', // 商用時必須要有版權出處
-    zoomControl: true, // 是否秀出 - + 按鈕
-  }).addTo(map);
-
   // 時間設置
   $("#date").text(
     `${now.getFullYear()} / ${now.getMonth() + 1} / ${now.getDate()}`
@@ -49,38 +98,12 @@ $(function () {
 
   $("#week").text(days[now.getDay()]);
 
-  //抓取到使用者位置之後
-  map.on("locationfound", (e) => {
-    let radius = e.accuracy;
-    // 建立 marker
-    L.marker(e.latlng)
-      .addTo(map)
-      .setLatLng(e.latlng)
-      .bindTooltip(`目前位置`, {
-        permanent: true, // 是滑鼠移過才出現，還是一直出現
-        opacity: 1.0,
-      })
-      .openTooltip();
-    L.circle(e.latlng, radius).addTo(map);
+  // // menu選單開關
+  $(".open-btn").click(() => {
+    $("#menu").toggleClass("active");
+    // console.log("123");
+    hasActive();
   });
-
-  // 抓不位置的話要做的事情
-  map
-    .on("locationerror", (e) => {
-      {
-        alert(
-          "無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心"
-        );
-        // map.setView(place, 18);
-        // 中心移到台中世貿
-        L.marker(place)
-
-          .addTo(map)
-          .bindPopup("預設位置")
-          .openPopup();
-      }
-    })
-    .setView(place, 16);
 
   // 載入藥局資料
   $.ajax({
@@ -96,7 +119,7 @@ $(function () {
     },
   });
   // console.log(maskData); //讀取健保局的所有藥局資料
-
+  // L.geoJSON(maskData).addTo(map);
   // 縣市綁定HTML選單
   // console.log(cityData);//監聽台灣縣市鄉鎮地區的資料集合
   $("#TaiwanCity")
@@ -109,55 +132,15 @@ $(function () {
     )
     .on("change", function () {
       const cityVal = $(this).val();
-      console.log(cityVal); //監聽所選取的縣市
+      // console.log(cityVal); //監聽所選取的縣市
       //監聽縣市，載入藥局資料
       const cityList = maskData.filter((i) => i.properties.county == cityVal);
       // console.log("cityList:", cityList);
       removeMarker(); // 清除地圖座標
-      // 渲染縣市地圖與藥局資訊
-      $("#drugStore")
-        .empty()
-        .append(
-          cityList.map((i, key) => {
-            let lat = i.geometry.coordinates[1],
-              lng = i.geometry.coordinates[0];
-            // console.log(i);
-            // console.log(lat, lng);
-            L.marker([lat, lng])
-              .addTo(map)
-              .bindPopup(
-                `<div class="store-card">
-                  <h4>${i.properties.name}</h4>
-                  <p><i class="fa-solid fa-location-dot"></i>　${i.properties.address}</p>
-                  <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
-                  <div class="btn-group">
-                  <button>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個</button>
-                  <button>兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</button>
-                </div>
-                </div>`
-              );
+      myLayer.addData(cityList);
+      drugStore(cityList);
 
-            //地圖移動
-            // console.log("key:", key);
-            if (key == 0) {
-              map.setView([lat, lng], 12);
-            }
-
-            return `
-              <li data-id="${i.properties.id}">
-                <h4>${i.properties.name}</h4>
-                <p><i class="fa-solid fa-location-dot"></i>　 ${i.properties.address}</p>
-                <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
-                <div class="btn-group">
-                  <button>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個</button>
-                  <button>兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</button>
-                </div>
-              </li>`;
-          })
-        );
-
-      // 匯入鄉鎮地區的資料
-      townData = cityData.find((e) => $(this).val() === e.CityName).AreaList;
+      townData = cityData.find((e) => $(this).val() === e.CityName).AreaList; // 篩選鄉鎮地區的資料
       // 鄉鎮地區綁定HTML選單
       $("#TaiwanTown")
         .empty()
@@ -181,64 +164,22 @@ $(function () {
           // console.log(townList);
 
           removeMarker(); // 清除地圖座標
-
-          //渲染藥局資訊
-          $("#drugStore")
-            .empty()
-            .append(
-              townList.map((i, key) => {
-                let lat = i.geometry.coordinates[1],
-                  lng = i.geometry.coordinates[0];
-
-                // console.log(lat, lng);
-                L.marker([lat, lng])
-                  .addTo(map)
-                  .bindPopup(
-                    `<div class="store-card">
-                      <h4>${i.properties.name}</h4>
-                      <p><i class="fa-solid fa-location-dot"></i>　${i.properties.address}</p>
-                      <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
-                      <div class="btn-group">
-                            <button>成人口罩: ${i.properties.mask_adult}個</button>
-                            <button>兒童口罩: ${i.properties.mask_adult}個</button>
-                        </div>
-                    </div>`
-                  );
-
-                //地圖移動
-                // console.log(key);
-                if (key == 0) {
-                  map.setView([lat, lng], 15);
-                }
-
-                return `
-                <li data-id="${i.properties.id}">
-                  <h4>${i.properties.name}</h4>
-                  <p><i class="fa-solid fa-location-dot"></i>　 ${i.properties.address}</p>
-                  <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
-                  <div class="btn-group">
-                    <button>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個</button>
-                    <button>兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</button>
-                  </div>
-                </li>`;
-              })
-            );
+          myLayer.addData(townList);
+          drugStore(townList);
         });
     });
 
   // let num = 1;
-  // console.log(maskData);
   $("ul").on("click", "li", function (e) {
     // console.log((num += 1));
-    const index = $(this).data("id"); // 取得被點擊的 li 元素的索引
-    const item = maskData.find((i) => i.properties.id == index); // 取得對應的物件資料
+    const index = $(this).data("id"); // 取得被點擊的 li 元素的data-id
     // console.log(index);
+    const item = maskData.find((i) => i.properties.id == index); // 取得對應的物件資料
     // console.log(item);
-
-    let lat = item.geometry.coordinates[1],
-      lng = item.geometry.coordinates[0];
+    let arr = [item.geometry.coordinates[1], item.geometry.coordinates[0]];
     // console.log([lat, lng]);
-    map.setView([lat, lng], 18);
+    map.flyTo(arr, 18).isPopupOpen("123");
+    // L.geoJSON(item,).addTo(map);
     $("#menu").toggleClass("active");
     hasActive();
   });
@@ -259,4 +200,34 @@ function hasActive() {
   } else {
     $(".open-btn-fa").removeClass("fa-x").addClass("fa-bars");
   }
+}
+
+function drugStore(storeList) {
+  //渲染藥局資訊
+  $("#drugStore")
+    .empty()
+    .append(
+      storeList.map((i, key) => {
+        let lat = i.geometry.coordinates[1],
+          lng = i.geometry.coordinates[0];
+        // console.log(lat, lng);
+
+        //地圖移動
+        // console.log(key);
+        if (key == 0) {
+          map.flyTo([lat, lng], 15);
+        }
+
+        return `
+                  <li data-id="${i.properties.id}">
+                    <h4>${i.properties.name}</h4>
+                    <p><i class="fa-solid fa-location-dot"></i>　 ${i.properties.address}</p>
+                    <p><i class="fa-solid fa-phone-volume"></i>　${i.properties.phone}</p>
+                    <div class="btn-group">
+                      <button>成人口罩: <span class="text-danger h4">${i.properties.mask_adult}</span>個</button>
+                      <button>兒童口罩: <span class="text-danger h4">${i.properties.mask_child}</span>個</button>
+                    </div>
+                  </li>`;
+      })
+    );
 }
