@@ -1,6 +1,7 @@
-let city = ""; //紀錄選取的縣市名稱
+import { cityData } from "./module/citydata.js";
+// console.log(cityData); //監聽台灣縣市鄉鎮地區的資料集合
+
 let townData = []; //匯入鄉鎮地區的資料
-let country = ""; //紀錄選取的鄉鎮地區
 let maskData = []; //匯入的藥局資料集合
 let days = [
   "星期日",
@@ -12,7 +13,6 @@ let days = [
   "星期六",
 ];
 const now = new Date();
-// const value = $(this).val();
 
 // 地圖資訊
 const place = [24.177253541961687, 120.61678567485743]; //經緯度
@@ -23,16 +23,23 @@ let myLayer = L.geoJSON() // 渲染縣市地圖的藥局資訊
     let item = layer.feature.properties;
     console.log(item);
     return `<div class="store-card">
-    <h4>${item.name}</h4>
-    <p><i class="fa-solid fa-location-dot"></i>　${item.address}</p>
-    <p><i class="fa-solid fa-phone-volume"></i>　${item.phone}</p>
-    <div class="btn-group">
-          <button>成人口罩: ${item.mask_adult}個</button>
-          <button>兒童口罩: ${item.mask_child}個</button>
-      </div>
-   /div>`;
+              <h4>${item.name}</h4>
+              <p><i class="fa-solid fa-location-dot"></i>　${item.address}</p>
+              <p><i class="fa-solid fa-phone-volume"></i>　${item.phone}</p>
+              <div class="btn-group">
+                <button>成人口罩: ${item.mask_adult}個</button>
+                <button>兒童口罩: ${item.mask_child}個</button>
+              </div>
+            </div>`;
   })
   .addTo(map);
+
+// 載入圖資
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', // 商用時必須要有版權出處
+  zoomControl: true, // 是否秀出 - + 按鈕
+}).addTo(map);
 
 //抓取使用者位置
 map.locate({
@@ -43,36 +50,10 @@ map.locate({
   timeout: 10000, // 觸發locationerror事件之前等待的毫秒數
 });
 
-// 載入圖資
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', // 商用時必須要有版權出處
-  zoomControl: true, // 是否秀出 - + 按鈕
-}).addTo(map);
-
-//圓形座標
-let MarkerOptions = {
-  radius: 8,
-  fillColor: "#ff7800",
-  color: "#000",
-  weight: 1,
-  opacity: 1,
-  fillOpacity: 0.8,
-};
-
 //抓取到使用者位置之後
 map.on("locationfound", (e) => {
-  let radius = e.accuracy;
-  // 建立 marker
-  L.circleMarker(e.latlng, MarkerOptions)
-    .addTo(map)
-    .setLatLng(e.latlng)
-    .bindTooltip(`目前位置`, {
-      permanent: true, // 是滑鼠移過才出現，還是一直出現
-      opacity: 1.0,
-    })
-    .openTooltip();
   // console.log("e.latlng", e.latlng);
+  useCircle(e.latlng, `目前位置`);
 });
 
 // 抓不位置的話要做的事情
@@ -82,10 +63,7 @@ map
       alert("無法判斷您的所在位置，無法使用此功能。預設地點將為 台中世貿中心");
       // map.setView(place, 18);
       // 中心移到台中世貿
-      L.circleMarker(place, MarkerOptions)
-        .addTo(map)
-        .bindPopup("預設位置")
-        .openPopup();
+      useCircle(place, "預設位置");
     }
   })
   .setView(place, 16);
@@ -119,9 +97,8 @@ $(function () {
     },
   });
   // console.log(maskData); //讀取健保局的所有藥局資料
-  // L.geoJSON(maskData).addTo(map);
+
   // 縣市綁定HTML選單
-  // console.log(cityData);//監聽台灣縣市鄉鎮地區的資料集合
   $("#TaiwanCity")
     .empty()
     .append(`<option selected>--縣市--</option>`)
@@ -192,6 +169,21 @@ function removeMarker() {
       map.removeLayer(layer);
     }
   });
+}
+
+// 建立 circleMarker
+function useCircle(center, nowMap) {
+  L.circleMarker(center, {
+    radius: 8,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8,
+  })
+    .addTo(map)
+    .bindPopup(nowMap)
+    .openPopup();
 }
 
 function hasActive() {
